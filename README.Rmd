@@ -96,11 +96,18 @@ plot1
 
 ## Earthquake Plotting in Space
 
-earthquakeMap's `eq_map` function shows earthquakes on an interactive map, with more information the earthquake provided when users click on the plotted point. Below is an example map using the same set of earthquakes as the first plot.
+earthquakeMap's `eq_map` function shows earthquakes on an interactive map, with more information the earthquake provided when users click on the plotted point. Below is a sample screenshot map of the same data as the first plot.
 
-```{r eq_map_ex}
+```{r eq_map_ex, eval = FALSE}
 x %>%
   ## Create a popup text label with the eq_create_label function
   mutate(popup_text = eq_create_label(.)) %>%
+  
+  ## Filter to the USA and Mexico 
+  filter(COUNTRY %in% c("MEXICO", "USA") & date >= as.Date("2000-01-01")) %>%
+
+  ## Map
   eq_map(annot_col = "popup_text")
 ```
+
+![Earthquakes in Mexico](C:\Users\Cody\Google Drive\Software Development in R\course_5\out\usa_mexico_since_2000.png)
