@@ -63,9 +63,9 @@ range(y1$YEAR)
 head(y1$date)
 ```
 
-## `geom_timeline()`
+## `geom_timeline()` (with `stat_timeline()` and `draw_panel_function()`)
 
-`geom_timeline()` function displays earthquakes on a timeline, with point size corresponding to magnitude and point color to the number of fatalities. Each country selected is given its own timeline. Below is a plot of all earthquakes in the US and Mexico since 2005.
+`geom_timeline()` function displays earthquakes on a timeline, with point size corresponding to magnitude and point color to the number of fatalities. Each country selected is given its own timeline. `geom_timeline()` calls `stat_timeline()` as a stat and uses `draw_panel_function()` to draw the plot grobs. Below is a plot of all earthquakes in the US and Mexico since 2005.
 
 
 ```{r geom_timeline_ex}
@@ -100,8 +100,8 @@ plot0 <- ggplot() +
 plot0
 ```
 
-## `geom_timeline_label()`
-`geom_timeline_label()` provides additional labeling and subsetting capabilities. Users can set a maximum number of earthquakes to plot per country using the `n_max` parameter (the function selects the highest magnitude earthquakes first). The output also provides location labels for many earthquakes. Below is a graph of the same set of earthquakes as the prior example, selecting only the 10 highest magnitude earthquakes.
+## `geom_timeline_label()` (with `stat_timeline_label()` and `label_draw_panel_function()`)
+`geom_timeline_label()` provides additional labeling and subsetting capabilities. Users can set a maximum number of earthquakes to plot per country using the `n_max` parameter (the function selects the highest magnitude earthquakes first). The output also provides location labels for many earthquakes. `geom_timeline()` calls `stat_timeline_label()` as a stat and uses `label_draw_panel_function()` to draw the plot grobs. Below is a graph of the same set of earthquakes as the prior example, selecting only the 10 highest magnitude earthquakes.
 
 ```{r geom_timeline_label_ex}
 plot1 <- ggplot() +
