@@ -1,6 +1,9 @@
-# Test geom_timeline_label
+# Test geom_timeline_label (with stat_timeline_label and label_draw_panel_function)
 
-test_that("test_geom_timeline_label", {
+# Note: stat_timeline_label and label_draw_panel_function are embedded in the
+# geom_timeline_label call and so are only testable within it (i.e. not independently)
+
+test_that("test_geom_timeline_label_w_stat_timeline_label_and_label_draw_panel_function", {
   x <- earthquake_read() %>%
 
     eq_clean_data() %>%

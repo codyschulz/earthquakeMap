@@ -1,6 +1,9 @@
-# Test geom_timeline
+# Test geom_timeline (with stat_timeline and draw_panel_function)
 
-test_that("test_geom_timeline", {
+# Note: stat_timeline and draw_panel_function are embedded in the
+# geom_timeline call and so are only testable within it (i.e. not independently)
+
+test_that("test_geom_timeline_w_stat_timeline_and_draw_panel_function", {
   x <- earthquake_read() %>%
 
     eq_clean_data() %>%
