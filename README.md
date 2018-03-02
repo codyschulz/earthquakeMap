@@ -113,4 +113,4 @@ x %>%
   eq_map(annot_col = "popup_text")
 ```
 
-![Earthquakes in Mexico](C:\Users\Cody\Google%20Drive\Software%20Development%20in%20R\course_5\out\usa_mexico_since_2000.png)
+![Earthquakes in Mexico](https://github.com/codyschulz/imageFiles/blob/master/usa_mexico_since_2000.png?raw=true)
