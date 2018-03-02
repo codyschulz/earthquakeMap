@@ -1,0 +1,143 @@
+---
+title: "earthquakeMap_Functions"
+author: "Cody Schulz"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+fig_width: 8
+fig_height: 6
+vignette: >
+  %\VignetteIndexEntry{earthquakeMap_Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# earthquakeMap
+
+earthquakeMap helps users visualize over 4,000 years of earthquake statistics in both time and space.
+
+## Installation
+
+earthquakeMap can be installed using `devtools`:
+```{r devtools, eval = FALSE}
+library(devtools)
+install_github("codyschulz/earthquakeMap")
+library(earthquakeMap)
+```
+## Load Packages
+
+```{r load_packages, results = 'hide', warning = FALSE, message = FALSE}
+## Open packages
+libs <- c("readr", "magrittr", "dplyr", "earthquakeMap", "ggplot2", "lubridate")
+lapply(libs, require, character.only = TRUE)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+## `earthquake_read()`
+
+`earthquake_read()` reads the raw earthquake data in as a `dplyr` `tbl_df`.
+```{r earthquake_read}
+
+## Open dataset
+x <- earthquake_read()
+```
+
+## `eq_location_clean()`
+
+`eq_location_clean()` cleans the LOCATION_NAME variable for use in plotting. The country name and extraneous location information are removed and the string is put in proper case.
+
+```{r eq_location_clean}
+head(x$LOCATION_NAME)
+y <- eq_location_clean(x)
+head(y$LOCATION_NAME)
+```
+
+## `eq_clean_data()`
+
+`eq_clean_data()` readies the raw earthquake data for plotting. It subsets the data to only include earthquakes happening in AD years; converts the EQ_PRIMARY, TOTAL_DEATHS, LATITUDE, LONGITUDE to numeric; creates a date variable; and runs `eq_location_clean()`.
+```{r eq_clean_data}
+str(x[,c("EQ_PRIMARY", "TOTAL_DEATHS", "LATITUDE", "LONGITUDE")])
+range(x$YEAR)
+y1 <- eq_clean_data(x)
+str(y1[,c("EQ_PRIMARY", "TOTAL_DEATHS", "LATITUDE", "LONGITUDE")])
+range(y1$YEAR)
+head(y1$date)
+```
+
+## `geom_timeline()`
+
+`geom_timeline()` function displays earthquakes on a timeline, with point size corresponding to magnitude and point color to the number of fatalities. Each country selected is given its own timeline. Below is a plot of all earthquakes in the US and Mexico since 2005.
+
+
+```{r geom_timeline_ex}
+y2 <- y1 %>%
+  
+  ## Filter
+  filter(COUNTRY %in% c("USA", "MEXICO") & year(date) >= 2000) 
+
+## Create a theme
+my_theme <-   theme(
+  axis.title.y = element_blank(),
+  panel.background = element_blank(),
+  legend.position="bottom",
+  legend.key = element_blank(),
+  axis.line.x = element_line()
+)
+
+plot0 <- ggplot() +
+  geom_timeline(data = y2, aes(
+    x = date,
+    xmin = as.Date("2005-01-01"), 
+    xmax = as.Date("2018-02-22"), 
+    colour = TOTAL_DEATHS, 
+    y = COUNTRY, 
+    size = EQ_PRIMARY
+    )
+  ) +
+  scale_size_continuous(name = "Richter scale value") +
+  scale_colour_continuous(name = "# deaths") +
+  xlab("DATE") +
+  my_theme
+plot0
+```
+
+## `geom_timeline_label()`
+`geom_timeline_label()` provides additional labeling and subsetting capabilities. Users can set a maximum number of earthquakes to plot per country using the `n_max` parameter (the function selects the highest magnitude earthquakes first). The output also provides location labels for many earthquakes. Below is a graph of the same set of earthquakes as the prior example, selecting only the 10 highest magnitude earthquakes.
+
+```{r geom_timeline_label_ex}
+plot1 <- ggplot() +
+  geom_timeline_label(data = y2, aes(
+    x = date, 
+    xmin = as.Date("2005-01-01"), 
+    label = LOCATION_NAME,
+    xmax = as.Date("2018-02-22"), 
+    colour = TOTAL_DEATHS, 
+    y = COUNTRY, 
+    size = EQ_PRIMARY
+    ),
+    n_max = 10
+  ) +
+  scale_x_date(expand = c(.15, .15)) +
+  scale_size_continuous(name = "Richter scale value") +
+  scale_colour_continuous(name = "# deaths") +
+  xlab("DATE") +
+  my_theme
+plot1
+```
+
+## `eq_create_label()`
+
+`eq_create_label()` creates a popup label column in the earthquake data for use in `eq_map()` (discussed below). The label displays the earthquake location, magnitude, and death toll--if they are available--with HTML formatting.
+```{r eq_create_label_ex}
+y3 <- y2 %>%
+  mutate(popup_text = eq_create_label(.))
+head(y3$popup_text)
+```
+
+## `eq_map`
+
+`eq_map` shows earthquakes on an interactive map, with more information the earthquake provided when users click on the plotted point. Users can provide arguments to the `annot_col` parameter to choose a variable that serves as the popup text label. Below is an example map using the same set of earthquakes as the first plot using the `popup_text` variable created in the above example.
+
+```{r eq_map_ex}
+y3 %>%
+  eq_map(annot_col = "popup_text")
+```
