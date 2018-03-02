@@ -2,7 +2,8 @@
 title: "README"
 author: "Cody Schulz"
 date: "February 26, 2018"
-output: html_document
+output: github_document
+always_allow_html: yes
 ---
 
 ```{r setup, include=FALSE}
