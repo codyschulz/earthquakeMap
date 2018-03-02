@@ -8,7 +8,7 @@ Description: Reads in, cleans, and visualizes NOAA earthquake data.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Suggests: knitr, rmarkdown, testthat 
+Suggests: knitr, rmarkdown, testthat, lubridate 
 VignetteBuilder: knitr
 Imports: dplyr, maps, readr, tidyr, ggplot2, leaflet, grid, magrittr, stringr
 RoxygenNote: 6.0.1
