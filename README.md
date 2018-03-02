@@ -68,10 +68,9 @@ plot0 <- ggplot() +
   scale_colour_continuous(name = "# deaths") +
   xlab("DATE") +
   my_theme
-plot0
 ```
 
-![](README_files/figure-markdown_github/geom_timeline_ex-1.png)
+![Earthquakes in USA & Mexico Timeline](https://github.com/codyschulz/imageFiles/blob/master/geom_timeline.png?raw=true)
 
 The `geom_timeline_label` function provides additional labeling and subsetting capabilities. Users can set a maximum number of earthquakes to plot per country using the `n_max` parameter (the function selects the highest magnitude earthquakes first). The output also provides location labels for many earthquakes. Below is a graph of the same set of earthquakes as the prior example, selecting only the 10 highest magnitude earthquakes.
 
@@ -93,10 +92,9 @@ plot1 <- ggplot() +
   scale_colour_continuous(name = "# deaths") +
   xlab("DATE") +
   my_theme
-plot1
 ```
 
-![](README_files/figure-markdown_github/geom_timeline_label_ex-1.png)
+![Earthquakes in USA & Mexico Timeline Label](https://github.com/codyschulz/imageFiles/blob/master/geom_timeline_label.png?raw=true)
 
 Earthquake Plotting in Space
 ----------------------------
@@ -115,4 +113,4 @@ x %>%
   eq_map(annot_col = "popup_text")
 ```
 
-![Earthquakes in Mexico](https://github.com/codyschulz/imageFiles/blob/master/usa_mexico_since_2000.png?raw=true)
+![Earthquakes in USA & Mexico](https://github.com/codyschulz/imageFiles/blob/master/usa_mexico_since_2000.png?raw=true)
